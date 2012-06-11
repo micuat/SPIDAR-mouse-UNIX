@@ -1,0 +1,49 @@
+###########################################
+# Simple Makefile for HIDAPI test program
+#
+# Alan Ott
+# Signal 11 Software
+# 2010-06-01
+#
+# Modified by Naoto Hieda
+# 2012-06-11
+###########################################
+
+all: spidar-mouse-server libs
+
+libs: libhidapi.so
+
+CC       ?= cc
+CFLAGS   ?= -Wall -g -fPIC
+
+CXX      ?= c++
+CXXFLAGS ?= -Wall -g
+
+COBJS     = hid.o
+CPPOBJS   = ../src/main.o
+OBJS      = $(COBJS) $(CPPOBJS)
+INCLUDES  = -I../hidapi -I/usr/local/include
+LDFLAGS   = -L/usr/local/lib
+LIBS      = -lusb -liconv -pthread
+
+
+# Console Test Program
+spidar-mouse-server: $(OBJS)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LIBS)
+
+# Shared Libs
+libhidapi.so: $(COBJS)
+	$(CC) $(LDFLAGS) -shared -Wl,-soname,$@.0 $^ -o $@
+
+# Objects
+$(COBJS): %.o: %.c
+	$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
+
+$(CPPOBJS): %.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $(INCLUDES) $< -o $@
+
+
+clean:
+	rm -f $(OBJS) spidar-mouse-server libhidapi.so
+
+.PHONY: clean libs
