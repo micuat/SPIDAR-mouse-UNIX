@@ -338,6 +338,7 @@ int main(int argc, char* argv[])
 	dstSocket = accept(srcSocket, (struct sockaddr *)&dstAddr, (socklen_t *)&dstAddrSize);
 	
 	while(1) {
+		memset(rbuf, 0, sizeof(rbuf));
 		numrcv = recv(dstSocket, rbuf, 256, 0);
 		if( numrcv <= 0 ) {
 			break;
