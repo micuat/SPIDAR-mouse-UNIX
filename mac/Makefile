@@ -14,9 +14,9 @@ all: spidar-mouse-server
 CC=gcc
 CXX=g++
 COBJS=hid.o
-CPPOBJS=../src/main.o
+CPPOBJS=../src/spidarMouse.o ../src/main.o
 OBJS=$(COBJS) $(CPPOBJS)
-CFLAGS+=-I../hidapi -Wall -g -c 
+CFLAGS+=-I../hidapi -I../src -Wall -g -c 
 LIBS=-framework IOKit -framework CoreFoundation
 
 
